@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'weatherblog',
-    'mysite'
+    'mysite',
 ]
 
 MIDDLEWARE = [
@@ -115,6 +115,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+CSRF_COOKIE_SECURE = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
