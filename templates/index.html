@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
         <link rel="stylesheet" href="{% static "myvenv/style.css" %}">
 
-        <title>App</title>
+        <title>Weather blog</title>
 
     </head>
 
@@ -21,11 +21,14 @@
     	<div class="content">
             <header>
                 <nav class="navbar navbar-light bg-light">
-                    <a class="white navbar-brand" href="">Weather blog</a>
-                    <!-- <form class="form-inline"> -->
+                    <a class="navbar-brand" href="">Weather blog</a>
+                    <a class="navbar-brand text-for-navbar" href="http://127.0.0.1:8000/storage/">Weather storage</a>
+
+                    <!-- <form class="form-inline my-2 my-lg-0" method="post"> -->
                         <input class="form-control mr-sm-2" type="search" placeholder="Enter City" aria-label="Search" id="cityName">
                         <button class="btn btn-outline-success my-2 my-sm-0 buttonUp" type="submit" onclick="infoAboutCity()">Search</button>
                     <!-- </form> -->
+
                 </nav>
             </header>
 
@@ -38,13 +41,13 @@
                             City
                           </div>
                           <ul class="list-group list-group-flush">
-                            <li class="list-group-item"><a href="#" id="nameCity">Vinnytsia</a></li>
-                            <li class="list-group-item"><a href="#" id="tempCity">Kiev</a></li>
-                            <li class="list-group-item"><a href="#" id="description">Lviv</a></li>
+                            <li class="list-group-item"><a href="#" id="nameCity">Name</a></li>
+                            <li class="list-group-item"><a href="#" id="tempCity">Temp</a></li>
+                            <li class="list-group-item"><a href="#" id="description">Description</a></li>
+                            <li class="list-group-item"><a href="#" id="date">Date</a></li>
                           </ul>
                     </div>
                 </div>
-
             </main>
         </div>
 

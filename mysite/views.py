@@ -11,12 +11,12 @@ import json
 # def post_list(request):
 #     return render(request, 'myvenv/index.html', {})
 
-
+@csrf_exempt
 def index(request):
     return render(request, 'index.html')
 
-def test(request):
-    return HttpResponse("Hi World")
+def storage(request):
+    return render(request, 'dbdata.html')
 
 @csrf_exempt
 def api(request):

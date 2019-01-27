@@ -35,5 +35,10 @@ body {
 
 
 .buttonUp{
-    margin-top: 1% !important;
+    margin-top: 10px !important;
+}
+
+.text-for-navbar{
+    font-size: 13px;
+    font-family: sans-serif;
 }
