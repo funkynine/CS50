@@ -1,8 +1,11 @@
+// Declare variables
 let map;
 let date;
 
+// Find out the date
 date = new Date();
 
+// Map initialization
 function initMap() {
 mapOptions = {
           zoom: 8,
@@ -12,10 +15,12 @@ mapOptions = {
             mapOptions);
 }
 
+// Change center position map
 function changeCenter(latitude, longitude){
   map.setCenter({lat: latitude, lng: longitude});
 }
 
+// Take the city that the user entered
 function infoAboutCity() {
     cityName = document.getElementById('cityName').value
     data = {
@@ -25,6 +30,7 @@ function infoAboutCity() {
     addInfo(data, 'api/')
 }
 
+// Pulling data from the server
 function addInfo(payload, url){
   fetch(url, {
     method: 'post',
@@ -42,6 +48,7 @@ function addInfo(payload, url){
   })
 }
 
+// Just date for user
 function formatDate(date) {
   var monthNames = [
     "January", "February", "March",
@@ -57,11 +64,10 @@ function formatDate(date) {
   return day + ' ' + monthNames[monthIndex] + ' ' + year;
 }
 
+// Processing data from the server
 function takeInfo(data){
 
-
-    console.log(data)
-
+    // Check whether there is such a city
     switch (data.cod) {
         case '404':
             alert (data.message)
@@ -81,5 +87,6 @@ function takeInfo(data){
     document.getElementById('description').innerHTML = main
     document.getElementById('date').innerHTML = formatDate(new Date())
 
+    // Change the center of the map
     changeCenter(lat, lon)
 }
