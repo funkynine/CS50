@@ -69,6 +69,7 @@ def api(request):
 
             # Insert the data in the table
             # db.execute("INSERT INTO CITYS (name, temp, description, date) VALUES(name, temp, description, date)")
+            # db.execute("INSERT INTO CITYS (name, temp, description, date) VALUES(:name, :temp, :description, :date)")
             return JsonResponse(data, status=200)
         else:
             return JsonResponse(data, status=208)
