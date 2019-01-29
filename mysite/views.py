@@ -51,15 +51,17 @@ def api(request):
         res = requests.get(url)
         data = res.json()
 
-        print(data)
-
         # Check status code
         if data['cod'] == 200:
 
             # Take data from json
             name = data['name']
-            temp = data['main']['temp']
+            temp = int(data['main']['temp'])
             description = data['weather'][0]['description']
+
+            print(type(name))
+            print(type(temp))
+            print(type(description))
 
             # Date for DB in string
             now = datetime.datetime.now()
@@ -68,8 +70,9 @@ def api(request):
             params = (name, temp, description, date)
 
             # Insert the data in the table
-            # db.execute("INSERT INTO CITYS (name, temp, description, date) VALUES(name, temp, description, date)")
-            # db.execute("INSERT INTO CITYS (name, temp, description, date) VALUES(:name, :temp, :description, :date)")
+            db.execute('''INSERT INTO CITYS (name, temp, description, date) VALUES(?, ?, ?, ?)''', params)
+            conn.commit()
+            conn.close()
             return JsonResponse(data, status=200)
         else:
             return JsonResponse(data, status=208)
