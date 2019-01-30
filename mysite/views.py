@@ -8,6 +8,8 @@ import datetime
 import sqlite3
 import os.path
 
+# Connect file DB
+sqlite_file = 'dbsite.db'
 
 # Create your views here.
 
@@ -19,7 +21,28 @@ def index(request):
 # Out put data in table
 @csrf_exempt
 def storage(request):
-    return render(request, 'dbdata.html')
+
+    # Check if there is a file in the directory
+    if os.path.exists(sqlite_file):
+        print('DataBase file find')
+    else:
+        print('File NOT exists')
+
+    # Connect DataBase
+    conn = sqlite3.connect(sqlite_file)
+    # Create cursor
+    db = conn.cursor()
+
+    db.execute('''SELECT * FROM CITYS LIMIT 3; ''')
+
+    result = db.fetchall()
+
+    conn.commit()
+    conn.close()
+
+    result = {"result": result}
+
+    return render(request, 'dbdata.html', context=result)
 
 # Url take data API and connect sqlite database
 @csrf_exempt
@@ -71,6 +94,7 @@ def api(request):
 
             # Insert the data in the table
             db.execute('''INSERT INTO CITYS (name, temp, description, date) VALUES(?, ?, ?, ?)''', params)
+
             conn.commit()
             conn.close()
             return JsonResponse(data, status=200)
