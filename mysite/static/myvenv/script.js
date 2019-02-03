@@ -1,6 +1,7 @@
 // Declare variables
 let map;
 let date;
+let testString = 'My string';
 
 // Find out the date
 date = new Date();

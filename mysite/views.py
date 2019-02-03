@@ -8,8 +8,9 @@ import datetime
 import sqlite3
 import os.path
 
+
 # Connect file DB
-sqlite_file = 'dbsite.db'
+SQLITE_FILE = 'dbsite.db'
 
 # Create your views here.
 
@@ -21,26 +22,40 @@ def index(request):
 # Out put data in table
 @csrf_exempt
 def storage(request):
-
+    decr = 0
     # Check if there is a file in the directory
-    if os.path.exists(sqlite_file):
+    if os.path.exists(SQLITE_FILE):
         print('DataBase file find')
     else:
         print('File NOT exists')
 
     # Connect DataBase
-    conn = sqlite3.connect(sqlite_file)
+    conn = sqlite3.connect(SQLITE_FILE)
     # Create cursor
     db = conn.cursor()
 
-    db.execute('''SELECT * FROM CITYS LIMIT 3; ''')
+    db.execute('SELECT count(*) FROM CITYS')
+    count = ((db.fetchone()[0] + 1) // 5) + 1
+    # Request to database
+    page = 0
+    if (request.GET.get('page')):
+        decr = int(request.GET.get('page')) - 1
+        page = decr * 4
 
+    db.execute('SELECT * FROM CITYS LIMIT 5 OFFSET ?', (page,))
+
+    # Assignment of data from the database
     result = db.fetchall()
-
+    # Record changes and close the connection
     conn.commit()
     conn.close()
-
+    # Create dict
     result = {"result": result}
+    result["count"] = count
+    result["previousPage"] = decr
+
+    if(count != decr + 1):
+        result["nextPage"] = decr + 2
 
     return render(request, 'dbdata.html', context=result)
 
@@ -56,17 +71,14 @@ def api(request):
         # Connect API
         url = 'http://api.openweathermap.org/data/2.5/weather?q={}&appid=a844a051424724097641db263e8f5bc9&units=metric'.format(city)
 
-        # Connect file DB
-        sqlite_file = 'dbsite.db'
-
         # Check if there is a file in the directory
-        if os.path.exists(sqlite_file):
-            print('File exists')
+        if os.path.exists(SQLITE_FILE):
+            print('DataBase file find')
         else:
             print('File NOT exists')
 
         # Connect DataBase
-        conn = sqlite3.connect(sqlite_file)
+        conn = sqlite3.connect(SQLITE_FILE)
         # Create cursor
         db = conn.cursor()
 
@@ -81,10 +93,6 @@ def api(request):
             name = data['name']
             temp = int(data['main']['temp'])
             description = data['weather'][0]['description']
-
-            print(type(name))
-            print(type(temp))
-            print(type(description))
 
             # Date for DB in string
             now = datetime.datetime.now()
