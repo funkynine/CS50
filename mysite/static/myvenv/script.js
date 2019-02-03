@@ -8,11 +8,13 @@ date = new Date();
 
 // Map initialization
 function initMap() {
+    const elem = document.getElementById('map');
+    if(!elem) { return; }
 mapOptions = {
           zoom: 8,
           center: {lat: 50.401, lng: 30.252}
         };
-    map =new google.maps.Map(document.getElementById('map'),
+    map =new google.maps.Map(elem,
             mapOptions);
 }
 
@@ -90,4 +92,16 @@ function takeInfo(data){
 
     // Change the center of the map
     changeCenter(lat, lon)
+}
+
+function filterDate(city) {
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    if(!startDate || !endDate) { return; }
+    if (city != '0') {
+        console.log(city);
+        document.location = `/storage/?filter=${city}&date-start=${startDate}&date-end=${endDate}`;
+    } else {
+        document.location = `/storage/?date-start=${startDate}&date-end=${endDate}`;
+    }
 }

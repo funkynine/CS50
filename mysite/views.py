@@ -23,6 +23,10 @@ def index(request):
 @csrf_exempt
 def storage(request):
     decr = 0
+    page = 0
+    city = 0
+    startDate = 0
+    endDate = 0
     # Check if there is a file in the directory
     if os.path.exists(SQLITE_FILE):
         print('DataBase file find')
@@ -36,13 +40,28 @@ def storage(request):
 
     db.execute('SELECT count(*) FROM CITYS')
     count = ((db.fetchone()[0] + 1) // 5) + 1
-    # Request to database
-    page = 0
+
+    db.execute('SELECT DISTINCT name FROM CITYS')
+    cities = db.fetchall()
+
     if (request.GET.get('page')):
         decr = int(request.GET.get('page')) - 1
         page = decr * 4
 
-    db.execute('SELECT * FROM CITYS LIMIT 5 OFFSET ?', (page,))
+    # Sort request
+    if (request.GET.get('filter')):
+        city = request.GET.get('filter')
+
+        db.execute('SELECT count(*) FROM CITYS WHERE name=?', (city,))
+        count = ((db.fetchone()[0] + 1) // 5) + 1
+
+        db.execute('SELECT * FROM CITYS WHERE name=? LIMIT 5 OFFSET ?', (city, page,) )
+    else:
+        db.execute('SELECT * FROM CITYS LIMIT 5 OFFSET ?', (page,))
+
+
+    
+
 
     # Assignment of data from the database
     result = db.fetchall()
@@ -53,6 +72,8 @@ def storage(request):
     result = {"result": result}
     result["count"] = count
     result["previousPage"] = decr
+    result["cities"] = cities
+    result["city"] = city
 
     if(count != decr + 1):
         result["nextPage"] = decr + 2
@@ -96,7 +117,8 @@ def api(request):
 
             # Date for DB in string
             now = datetime.datetime.now()
-            date = now.strftime("%B %d, %Y")
+            date = now.strftime("%d-%m-%Y")
+
 
             params = (name, temp, description, date)
 

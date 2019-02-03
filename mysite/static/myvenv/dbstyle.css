@@ -27,3 +27,26 @@ body {
 .page-link{
     color: #000 !important;
 }
+
+
+.dropdown-menu{
+    padding: 8px;
+    min-width: 400px;
+}
+
+#datepicker input{
+    min-width: 120px;
+}
+
+.btn-enter-date{
+    padding: 5px;
+    margin-left: 10px;
+}
+
+.btn-date .btn-city{
+    border-radius: 0px;
+}
+
+.input-group-addon{
+    padding: 0px 10px 0px 10px;
+}
