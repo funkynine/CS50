@@ -85,6 +85,7 @@ function takeInfo(data){
     let lat = data.coord.lat
     let lon = data.coord.lon
 
+    // Insert data in template
     document.getElementById('nameCity').innerHTML = cityName + ' ' + country
     document.getElementById('tempCity').innerHTML = 'Temp: ' + temp
     document.getElementById('description').innerHTML = main
@@ -94,6 +95,7 @@ function takeInfo(data){
     changeCenter(lat, lon)
 }
 
+// Event with date 
 function filterDate(city) {
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;

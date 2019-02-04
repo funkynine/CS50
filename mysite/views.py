@@ -12,8 +12,6 @@ import os.path
 # Connect file DB
 SQLITE_FILE = 'dbsite.db'
 
-# Create your views here.
-
 # Main render index HTML file
 @csrf_exempt
 def index(request):
@@ -22,11 +20,13 @@ def index(request):
 # Out put data in table
 @csrf_exempt
 def storage(request):
+    # Variable declarations
     decr = 0
     page = 0
     city = 0
     startDate = 0
     endDate = 0
+
     # Check if there is a file in the directory
     if os.path.exists(SQLITE_FILE):
         print('DataBase file find')
@@ -60,14 +60,13 @@ def storage(request):
         db.execute('SELECT * FROM CITYS LIMIT 5 OFFSET ?', (page,))
 
 
-    
-
-
     # Assignment of data from the database
     result = db.fetchall()
+
     # Record changes and close the connection
     conn.commit()
     conn.close()
+
     # Create dict
     result = {"result": result}
     result["count"] = count
@@ -75,6 +74,7 @@ def storage(request):
     result["cities"] = cities
     result["city"] = city
 
+    # Setting pangylation
     if(count != decr + 1):
         result["nextPage"] = decr + 2
 
@@ -119,14 +119,15 @@ def api(request):
             now = datetime.datetime.now()
             date = now.strftime("%d-%m-%Y")
 
-
             params = (name, temp, description, date)
 
             # Insert the data in the table
             db.execute('''INSERT INTO CITYS (name, temp, description, date) VALUES(?, ?, ?, ?)''', params)
 
+            # Database closure
             conn.commit()
             conn.close()
+
             return JsonResponse(data, status=200)
         else:
             return JsonResponse(data, status=208)
