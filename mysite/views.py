@@ -26,6 +26,7 @@ def storage(request):
     city = 0
     startDate = 0
     endDate = 0
+    date = []
 
     # Check if there is a file in the directory
     if os.path.exists(SQLITE_FILE):
@@ -38,9 +39,11 @@ def storage(request):
     # Create cursor
     db = conn.cursor()
 
+    # Calculation of how many pages in the table
     db.execute('SELECT count(*) FROM CITYS')
     count = ((db.fetchone()[0] + 1) // 5) + 1
 
+    # List cityes
     db.execute('SELECT DISTINCT name FROM CITYS')
     cities = db.fetchall()
 
@@ -56,23 +59,40 @@ def storage(request):
         count = ((db.fetchone()[0] + 1) // 5) + 1
 
         db.execute('SELECT * FROM CITYS WHERE name=? LIMIT 5 OFFSET ?', (city, page,) )
+
+    elif('date-start' in request.GET):
+
+        dateStart = request.GET.get('date-start').replace('/', '-')
+        dateEnd = request.GET.get('date-end').replace('/', '-')
+
+        db.execute('SELECT count(*) FROM CITYS WHERE date')
+        count = ((db.fetchone()[0] + 1) // 5) + 1
+
+        db.execute('SELECT * FROM CITYS WHERE date BETWEEN ? AND ? LIMIT 5', (dateStart, dateEnd,))
+        date = db.fetchall()
+
+        print(dateStart)
+        print(date)
+
     else:
         db.execute('SELECT * FROM CITYS LIMIT 5 OFFSET ?', (page,))
 
-
     # Assignment of data from the database
     result = db.fetchall()
-
+    print(result)
     # Record changes and close the connection
     conn.commit()
     conn.close()
 
     # Create dict
     result = {"result": result}
+    result["date"] = date
     result["count"] = count
     result["previousPage"] = decr
     result["cities"] = cities
     result["city"] = city
+
+    # print(result)
 
     # Setting pangylation
     if(count != decr + 1):
@@ -117,7 +137,7 @@ def api(request):
 
             # Date for DB in string
             now = datetime.datetime.now()
-            date = now.strftime("%d-%m-%Y")
+            date = now.strftime("%Y-%m-%d")
 
             params = (name, temp, description, date)
 

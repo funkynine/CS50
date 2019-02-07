@@ -95,15 +95,18 @@ function takeInfo(data){
     changeCenter(lat, lon)
 }
 
-// Event with date 
+// Event with date
 function filterDate(city) {
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
+
     if(!startDate || !endDate) { return; }
+    
     if (city != '0') {
         console.log(city);
         document.location = `/storage/?filter=${city}&date-start=${startDate}&date-end=${endDate}`;
     } else {
+        console.log(city)
         document.location = `/storage/?date-start=${startDate}&date-end=${endDate}`;
     }
 }
